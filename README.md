@@ -13,9 +13,11 @@ pip install -r requirements.txt
 ## What's Included
 - `lab2.ipynb`: The main Python script that does all the tasks described above.
 - `lab2.py`: The Python script deployed on Github Actions.
-- `events.csv`: All available events data from https://visitseattle.org/.
-- `locations.csv`: Location data (in latitude and longitude) of the place where the event takes place.
-- `weather.cvs`: Weather data of certain events (on the event day, at the location of events)
+- `data_demo folder`: Example data collected with `lab2.ipynb`
+    - `events.csv`: All available events data from https://visitseattle.org/.
+    - `locations.csv`: Location data (in latitude and longitude) of the place where the event takes place.
+    - `weather.cvs`: Weather data of certain events (on the event day, at the location of events)
+- `data_actions folder`: Data collected automatically via Github Actions.
 
 ## Decisions in Data Collection
 - To get the correct latitude and longitude data for events, this script tries to get the data via API using both the location (specific) and region (general) data, and also provides locations for some common places in Seattle that cannot/is difficult be searched via the API.
@@ -33,7 +35,7 @@ pip install -r requirements.txt
     - `events.csv`: https://techin510.blob.core.windows.net/lab2/events.csv 
     - `locations.csv`: https://techin510.blob.core.windows.net/lab2/locations.csv 
     - `weather.csv`: https://techin510.blob.core.windows.net/lab2/weather.csv 
-- 
+- Deployed Github Actions to automatically collect event data everyday on 13:30.
 
 
 ## Lessons Learned
