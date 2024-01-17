@@ -2,6 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 import csv
 from datetime import datetime, timedelta
+import re
 
 current_date = datetime.now() # get current date
 formatted_date_csv = current_date.strftime("%-m_%-d_%Y")
@@ -9,13 +10,22 @@ formatted_date_csv = current_date.strftime("%-m_%-d_%Y")
 links = []
 url = "https://visitseattle.org/events/page/" # + page number, from 1 to 41
 
+# get total number of pages
+res_page_num = requests.get(url + str(1) + "/") # get the first page
+soup_page_num = BeautifulSoup(res_page_num.text, "html.parser")
+selector_page_num = "#searchform > div > div > div.search-results > section > div.container-blog-pagination > div > div > div > nav > ol > li.bpn-last-page-link > a"
+link_page_num = soup_page_num.select(selector_page_num)[0]["href"] # get the last page link
+total_page_num = int(re.findall(r'page/(\d+)/', link_page_num)[0]) # get the last page number
+
 # loop pages
-for i in range(1, 42):
+for i in range(1, total_page_num + 1):
     res = requests.get(url + str(i) + "/")
     soup = BeautifulSoup(res.text, "html.parser")
     selector = "div.search-result-preview > div > h3 > a"
     link = soup.select(selector)
     links.extend([x['href'] for x in link])
+
+# print(links)
 
 details = [["Name", "Date", "Location", "Type", "Region"]]
 
@@ -53,7 +63,7 @@ for link in links:
         print('Exception:')
         print(ex)
 
-with open('events'+formatted_date_csv+'.csv', 'w', newline='') as csvfile:
+with open('./data_actions/events'+formatted_date_csv+'.csv', 'w', newline='') as csvfile:
     csv_writer = csv.writer(csvfile)
     csv_writer.writerows(details)
 
@@ -127,7 +137,7 @@ for i in range(1, len(details)):
                 location_cannotfind.append([details[i][2], details[i][4]])
 
 # save the coordinate data to a csv file
-with open('locations'+formatted_date_csv+'.csv', 'w', newline='') as csvfile:
+with open('./data_actions/locations'+formatted_date_csv+'.csv', 'w', newline='') as csvfile:
     csv_writer = csv.writer(csvfile)
     csv_writer.writerows(coordinate_data)
 
@@ -160,6 +170,6 @@ for i in range(0, len(details)):
             print(ex)
 
 # save the coordinate data to a csv file
-with open('weather'+formatted_date_csv+'.csv', 'w', newline='') as csvfile:
+with open('./data_actions/weather'+formatted_date_csv+'.csv', 'w', newline='') as csvfile:
     csv_writer = csv.writer(csvfile)
     csv_writer.writerows(weather_data)
