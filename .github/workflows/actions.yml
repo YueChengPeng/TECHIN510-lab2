@@ -1,4 +1,4 @@
-name: run main.py
+name: run lab2.py
 
 on:
   schedule:
@@ -22,8 +22,8 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
           
-      - name: execute py script # run main.py
-        run: python main.py
+      - name: execute py script # run lab2.py
+        run: python lab2.py
           
       - name: commit files
         run: |
